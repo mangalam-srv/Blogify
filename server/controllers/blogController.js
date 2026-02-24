@@ -1,6 +1,7 @@
 import fs from 'fs';
 import imagekit from '../configs/imageKit.js';
 import Blog from '../models/Blog.js';
+import Comment from '../models/Comment.js';
 
 
 export const addBlog = async( req,res)=>{
@@ -86,6 +87,8 @@ export const deleteBlogById = async(req,res)=>{
         const { id } = req.body;
          await Blog.findByIdAndDelete(id);
 
+        //delete all comment assosiated with this blog
+        await Comment.deleteMany({blog:id});
         
 
         res.json({success:true ,message:"Blog deleted successfully"})
