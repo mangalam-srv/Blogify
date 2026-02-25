@@ -5,28 +5,61 @@ import { useParams } from 'react-router-dom';
 import { assets, blog_data, comments_data } from '../assets/assets';
 import Moment from 'moment';
 import Loader from '../components/Loader';
+import { useAppContext } from '../context/AppContext';
+import toast from 'react-hot-toast';
 
 const Blog = () => {
 
   const {id} = useParams();
-  const [data ,setdata] =useState(null); 
-  const [comments ,setcomments] =useState([]); 
+  const {axios}  = useAppContext()
 
-  const [name ,setname] =useState(''); 
-  const [content ,setcontent] =useState(''); 
+  const [data ,setData] =useState(null); 
+  const [comments ,setComments] =useState([]); 
+
+  const [name ,setName] =useState(''); 
+  const [content ,setContent] =useState(''); 
 
 
   const fetchblogdata = async()=>{
-    const data = blog_data.find(item=>item._id===id )
-    setdata(data)
+    try{
+      const{data} = await axios.get(`/api/blog/${id}`)
+      data.success ? setData(data.blog) : toast.error(data.message)
+    }catch(error){
+      toast.error(error.message)
+    }
   }
    
   const fetchcomments = async()=>{
-    setcomments(comments_data)
+    try{
+      const {data} = await axios.post('/api/blog/comments',{blogId:id})
+      if(data.success){
+        setComments(data.comments)
+      }else{
+        toast.error(data.message)
+      }
+    }catch(error){
+      toast.error(error.message);
+    }
   }
 
   const addComment = async(e)=>{
     e.preventDefault();
+
+    try{
+      const {data} = await axios.post('/api/blog/add-comment',{blog:id , name , content});
+
+      if(data.success){
+        toast.success(data.message)
+        setName('')
+        setContent('')
+      }else{
+        toast.error(data.message)
+      }
+    }catch(error){
+      toast.error(error.message);
+    }
+
+
   }
 
   useEffect(()=>{
@@ -81,8 +114,8 @@ const Blog = () => {
         <p className='font-semibold mb-4'>Add Your Comment</p>
         <form onSubmit={addComment} className='flex flex-col items-start gap-4 max-w-lg'>
           <input onChange={(e)=>setName(e.target.value)} value={name} type="text" placeholder='Name' required className='w-full p-2 border border-gray-300  rounded outline-none'/>
-          <textarea onChange={(e)=>setcontent(e.target.value)} value={content}  placeholder='Comment' className='w-full p-2 border border-gray-300 rounded outline-none h-48 'required></textarea>
-          <button type='submit' className='bg-primary text-white roounded p-2 px-8 hover:scale-102 transition-all cursor-pointer'>Submit</button>
+          <textarea onChange={(e)=>setContent(e.target.value)} value={content}  placeholder='Comment' className='w-full p-2 border border-gray-300 rounded outline-none h-48 'required></textarea>
+          <button type='submit' className='bg-blue-600 text-white rounded p-2 px-8 hover:scale-102 transition-all cursor-pointer'>Submit</button>
 
         </form>
       </div>

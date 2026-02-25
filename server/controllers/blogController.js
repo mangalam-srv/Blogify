@@ -13,7 +13,7 @@ export const addBlog = async( req,res)=>{
 
         //check all are present 
         if( !title || !subTitle || !description || !category || !isPublished){
-            return res.JSON({success:false , message:"Missing required fields"})
+            return res.json({success:false , message:"Missing required fields"})
         }
 
         const   fileBuffer =fs.readFileSync(imageFile.path)
@@ -117,19 +117,23 @@ export const togglePublish = async(req,res)=>{
 
 
 
-export const addComment = async()=>{
-    try{
+export const addComment = async (req, res) => {
+    try {
 
-        const {blog , name , comment} = req.body;
-        await Comment.create({blog,name,comment});
-        res.json({success:true ,message:"Comment added for review"})
+        const { blog, name, content } = req.body;
 
-    }catch(error){
-         res.json({success:false , message: error.message});
+        if (!blog || !name || !content) {
+            return res.json({ success: false, message: "Missing required fields" });
+        }
 
+        await Comment.create({ blog, name, content });
 
+        res.json({ success: true, message: "Comment added for review" });
+
+    } catch (error) {
+        res.json({ success: false, message: error.message });
     }
-}
+};
 
 
 export const getBlogComments = async(req,res)=>{
@@ -150,3 +154,41 @@ export const getBlogComments = async(req,res)=>{
     }
 
 }
+
+
+export const getAllComments = async (req, res) => {
+    try {
+        const comments = await Comment.find()
+            .populate('blog', 'title')
+            .sort({ createdAt: -1 });
+
+        res.json({ success: true, comments });
+
+    } catch (error) {
+        res.json({ success: false, message: error.message });
+    }
+};
+
+export const approveComment = async (req, res) => {
+    try {
+        const { id } = req.body;
+
+        await Comment.findByIdAndUpdate(id, { isApproved: true });
+
+        res.json({ success: true, message: "Comment approved successfully" });
+    } catch (error) {
+        res.json({ success: false, message: error.message });
+    }
+};
+
+export const deleteComment = async (req, res) => {
+    try {
+        const { id } = req.body;
+
+        await Comment.findByIdAndDelete(id);
+
+        res.json({ success: true, message: "Comment deleted successfully" });
+    } catch (error) {
+        res.json({ success: false, message: error.message });
+    }
+};
