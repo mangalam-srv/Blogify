@@ -40,3 +40,29 @@
 .rich-text li { margin-bottom: 8px; }
 
 .rich-text a { color: #007AFF }
+
+
+
+/* Quill Editor Styling */
+
+.ql-toolbar {
+  border: 1px solid #d1d5db;   /* gray-300 */
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+}
+
+.ql-container {
+  border: 1px solid #d1d5db;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+}
+
+.ql-editor {
+  min-height: 320px;
+  font-size: 14px;
+}
+
+.ql-container:focus-within {
+  border-color: #2563eb;  /* blue-600 */
+  box-shadow: 0 0 0 1px #2563eb;
+}

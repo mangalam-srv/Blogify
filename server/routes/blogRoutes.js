@@ -10,7 +10,8 @@ import {
   getBlogComments,
   togglePublish,
   approveComment,
-  deleteComment
+  deleteComment,
+  generateContent
 } from '../controllers/blogController.js';
 import upload from '../middleware/multer.js';
 import auth from '../middleware/auth.js';
@@ -34,6 +35,7 @@ blogRouter.post('/approve-comment', auth, approveComment);
 blogRouter.post('/delete-comment', auth, deleteComment);
 
 
+blogRouter.post('/generate', auth, generateContent);
 
 
 
