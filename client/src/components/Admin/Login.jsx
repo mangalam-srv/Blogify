@@ -31,23 +31,30 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-lg">
-        
+    <div className="min-h-screen flex items-center justify-center 
+                    bg-gradient-to-br from-blue-50 to-indigo-100 px-6">
+
+      <div className="w-full max-w-md 
+                      bg-white/80 backdrop-blur-lg 
+                      border border-gray-200 
+                      rounded-2xl shadow-xl p-10">
+
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold">
-            <span className="text-indigo-600">Admin</span>{" "}
+        <div className="text-center mb-10">
+          <h1 className="text-4xl font-bold tracking-tight">
+            <span className="bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">
+              Admin
+            </span>{" "}
             <span className="text-gray-800">Login</span>
           </h1>
-          <p className="text-gray-500 mt-2 text-sm">
+          <p className="text-gray-500 mt-3 text-sm">
             Enter your credentials to access the admin panel
           </p>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-6 text-gray-600">
-          
+        <form onSubmit={handleSubmit} className="space-y-6">
+
           {/* Email */}
           <div>
             <label className="block mb-2 text-sm font-medium text-gray-700">
@@ -59,7 +66,11 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="your email id"
-              className="w-full border-b border-gray-300 focus:border-indigo-600 outline-none py-2 transition-all"
+              className="w-full px-4 py-3 rounded-lg 
+                         border border-gray-300 
+                         focus:ring-2 focus:ring-indigo-500 
+                         focus:border-indigo-500 
+                         outline-none transition-all"
             />
           </div>
 
@@ -74,23 +85,28 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="your password"
-              className="w-full border-b border-gray-300 focus:border-indigo-600 outline-none py-2 transition-all"
+              className="w-full px-4 py-3 rounded-lg 
+                         border border-gray-300 
+                         focus:ring-2 focus:ring-indigo-500 
+                         focus:border-indigo-500 
+                         outline-none transition-all"
             />
           </div>
 
           {/* Button */}
           <button
             type="submit"
-            className="w-full py-3 mt-6 rounded-md 
-             bg-gradient-to-r from-indigo-500 to-indigo-600
-             text-white font-medium
-             hover:from-indigo-600 hover:to-indigo-700
-             transition-all duration-300 
-             shadow-md hover:shadow-lg cursor-pointer"
-              >
-                         Login
-            </button>
+            className="w-full py-3 mt-6 rounded-lg 
+                       bg-gradient-to-r from-indigo-600 to-blue-600
+                       text-white font-medium 
+                       hover:opacity-90 
+                       transition-all duration-200 
+                       shadow-md hover:shadow-lg"
+          >
+            Login
+          </button>
         </form>
+
       </div>
     </div>
   );

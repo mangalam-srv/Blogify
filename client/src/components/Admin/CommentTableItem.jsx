@@ -41,40 +41,67 @@ const CommentTableItem = ({ comment, fetchComments }) => {
   }
 
   return (
-    <tr className='border-y border-gray-300'>
-      <td className='px-6 py-4'>
-        <b>Blog</b> : {blog?.title}
-        <br /><br />
-        <b>Name</b> : {name}
-        <br />
-        <b>Comment</b> : {content}
+    <tr className='border-b border-gray-200 hover:bg-gray-50 transition'>
+
+      <td className='px-6 py-5'>
+        <div className='space-y-2 text-sm'>
+          <p>
+            <span className='font-semibold text-gray-700'>Blog:</span>{" "}
+            <span className='text-gray-600'>{blog?.title}</span>
+          </p>
+
+          <p>
+            <span className='font-semibold text-gray-700'>Name:</span>{" "}
+            <span className='text-gray-600'>{name}</span>
+          </p>
+
+          <p className='text-gray-500 leading-relaxed'>
+            <span className='font-semibold text-gray-700'>Comment:</span>{" "}
+            {content}
+          </p>
+        </div>
       </td>
 
-      <td className='px-6 py-4 max-sm:hidden'>
+      <td className='px-6 py-5 text-sm text-gray-500 max-sm:hidden'>
         {blogDate.toLocaleDateString()}
       </td>
 
-      <td className='px-6 py-4'>
-        <div className='inline-flex items-center gap-4'>
+      <td className='px-6 py-5'>
+        <div className='flex items-center gap-4'>
+
           {!isApproved ? (
-            <img
+            <button
               onClick={approveComment}
-              src={assets.tick_icon}
-              className='w-5 cursor-pointer'
-            />
+              className='p-2 rounded-full bg-green-50 hover:bg-green-100 transition'
+            >
+              <img
+                src={assets.tick_icon}
+                className='w-5'
+                alt="approve"
+              />
+            </button>
           ) : (
-            <p className='text-xs border border-green-600 text-green-600 rounded-full px-3 py-1'>
+            <span className='text-xs font-medium 
+                             bg-green-50 text-green-600 
+                             px-3 py-1 rounded-full'>
               Approved
-            </p>
+            </span>
           )}
 
-          <img
+          <button
             onClick={deleteComment}
-            src={assets.bin_icon}
-            className='w-5 cursor-pointer'
-          />
+            className='p-2 rounded-full bg-red-50 hover:bg-red-100 transition'
+          >
+            <img
+              src={assets.bin_icon}
+              className='w-5'
+              alt="delete"
+            />
+          </button>
+
         </div>
       </td>
+
     </tr>
   )
 }

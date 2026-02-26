@@ -20,20 +20,14 @@ const AddBlog = () => {
 
   const generateContent = async () => {
     try {
-      if (!title) {
-        return toast.error("Please enter a blog title first")
-      }
+      if (!title) return toast.error("Please enter a blog title first")
 
-      const { data } = await axios.post("/api/blog/generate", {
-        prompt: title,
-      })
+      const { data } = await axios.post("/api/blog/generate", { prompt: title })
 
       if (data.success) {
         quillRef.current.root.innerHTML = data.content
         toast.success("AI content generated")
-      } else {
-        toast.error(data.message)
-      }
+      } else toast.error(data.message)
 
     } catch (error) {
       toast.error(error.response?.data?.message || error.message)
@@ -66,9 +60,7 @@ const AddBlog = () => {
         setSubTitle('')
         quillRef.current.root.innerHTML = ''
         setCategory('Startup')
-      } else {
-        toast.error(data.message)
-      }
+      } else toast.error(data.message)
 
     } catch (error) {
       toast.error(error.message)
@@ -84,83 +76,103 @@ const AddBlog = () => {
   }, [])
 
   return (
-    <form onSubmit={onSubmitHandler} className='flex-1 bg-blue-50/50 text-gray-600 h-full overflow-scroll'>
-      <div className='bg-white w-full max-w-3xl p-4 md:p-10 sm:m-10 shadow rounded'>
+    <form onSubmit={onSubmitHandler} className='flex-1 bg-gradient-to-b from-gray-50 to-white p-6 md:p-10 overflow-auto'>
 
-        <p>Upload Thumbnail</p>
-        <label htmlFor="image">
-          <img
-            src={!image ? assets.upload_area : URL.createObjectURL(image)}
-            alt=""
-            className='mt-2 h-16 rounded cursor-pointer'
-          />
+      <div className='max-w-3xl bg-white border border-gray-200 rounded-2xl shadow-sm p-8'>
+
+        <h2 className='text-xl font-semibold text-gray-800 mb-8'>
+          Create New Blog
+        </h2>
+
+        <div className='mb-6'>
+          <p className='text-sm font-medium text-gray-700 mb-2'>Upload Thumbnail</p>
+          <label htmlFor="image">
+            <img
+              src={!image ? assets.upload_area : URL.createObjectURL(image)}
+              alt=""
+              className='h-20 rounded-xl border border-gray-200 cursor-pointer hover:opacity-90 transition'
+            />
+            <input
+              onChange={(e) => setImage(e.target.files[0])}
+              type="file"
+              id='image'
+              hidden
+              required
+            />
+          </label>
+        </div>
+
+        <div className='mb-6'>
+          <p className='text-sm font-medium text-gray-700 mb-2'>Blog Title</p>
           <input
-            onChange={(e) => setImage(e.target.files[0])}
-            type="file"
-            id='image'
-            hidden
+            type="text"
             required
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className='w-full px-4 py-3 rounded-lg border border-gray-300 
+                       focus:ring-2 focus:ring-blue-500 outline-none transition'
           />
-        </label>
+        </div>
 
-        <p className='mt-4'>Blog Title</p>
-        <input
-          type="text"
-          placeholder='Type here'
-          required
-          className='w-full max-w-lg mt-2 p-2 border border-gray-300 outline-none rounded'
-          onChange={(e) => setTitle(e.target.value)}
-          value={title}
-        />
+        <div className='mb-6'>
+          <p className='text-sm font-medium text-gray-700 mb-2'>Sub Title</p>
+          <input
+            type="text"
+            required
+            value={subTitle}
+            onChange={(e) => setSubTitle(e.target.value)}
+            className='w-full px-4 py-3 rounded-lg border border-gray-300 
+                       focus:ring-2 focus:ring-blue-500 outline-none transition'
+          />
+        </div>
 
-        <p className='mt-4'>Sub Title</p>
-        <input
-          type="text"
-          placeholder='Type here'
-          required
-          className='w-full max-w-lg mt-2 p-2 border border-gray-300 outline-none rounded'
-          onChange={(e) => setSubTitle(e.target.value)}
-          value={subTitle}
-        />
+        <div className='mb-6'>
+          <p className='text-sm font-medium text-gray-700 mb-2'>Description</p>
 
-        <p className='mt-4'>Description</p>
-<div className='max-w-lg pb-16 pt-2 relative'>
-  <div ref={editorRef} className="min-h-[300px]"></div>
+          <div className='relative border border-gray-200 rounded-xl overflow-hidden'>
+            <div ref={editorRef} className="min-h-[300px] p-4"></div>
 
-  <button
-    type='button'
-    onClick={generateContent}
-    className='absolute bottom-2 right-2 text-xs text-white bg-black/70 px-4 py-1.5 rounded hover:underline hover:bg-black transition-all duration-200'
-  >
-    Generate With AI
-  </button>
-</div>
+            <button
+              type='button'
+              onClick={generateContent}
+              className='absolute bottom-3 right-3 text-xs 
+                         bg-gradient-to-r from-blue-600 to-indigo-600 
+                         text-white px-4 py-1.5 rounded-full shadow hover:opacity-90 transition'
+            >
+              Generate With AI
+            </button>
+          </div>
+        </div>
 
-        <p className='mt-4'>Blog Category</p>
-        <select
-          onChange={e => setCategory(e.target.value)}
-          value={category}
-          className='mt-2 px-3 py-2 border border-gray-300 outline-none rounded'
-        >
-          {blogCategories.map((item, index) => (
-            <option key={index} value={item}>{item}</option>
-          ))}
-        </select>
+        <div className='mb-6'>
+          <p className='text-sm font-medium text-gray-700 mb-2'>Blog Category</p>
+          <select
+            value={category}
+            onChange={e => setCategory(e.target.value)}
+            className='px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none'
+          >
+            {blogCategories.map((item, index) => (
+              <option key={index} value={item}>{item}</option>
+            ))}
+          </select>
+        </div>
 
-        <div className='flex gap-2 mt-4'>
-          <p>Publish Now</p>
+        <div className='flex items-center gap-3 mb-8'>
+          <span className='text-sm font-medium text-gray-700'>Publish Now</span>
           <input
             type="checkbox"
             checked={isPublished}
-            className='scale-125 cursor-pointer'
             onChange={e => setIsPublished(e.target.checked)}
+            className='scale-125 cursor-pointer'
           />
         </div>
 
         <button
           disabled={isAdding}
           type='submit'
-          className='mt-8 w-40 h-10 bg-blue-600 text-white rounded'
+          className='px-8 py-3 rounded-lg 
+                     bg-gradient-to-r from-blue-600 to-indigo-600 
+                     text-white font-medium shadow hover:opacity-90 transition'
         >
           {isAdding ? 'Adding...' : 'Add Blog'}
         </button>
