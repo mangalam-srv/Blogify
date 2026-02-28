@@ -17,7 +17,7 @@ Blogify is a full-stack blogging platform built with modern technologies includi
 | Frontend | React, Tailwind CSS |
 | Backend | Node.js, Express |
 | Database | MongoDB |
-| Deployment | *(Add deployed link when available)* |
+| Deployment | *(Yahi bacha hai bas)* |
 
 ## 🔗 Live Demo
 
